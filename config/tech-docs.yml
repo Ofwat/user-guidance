@@ -8,7 +8,8 @@ service_link: https://ofwat.github.io/user-guidance
 
 # Links to show on right-hand-side of header
 header_links:
-  Control Panel: https://controlpanel.services.analytical-platform.service.justice.gov.uk/
+  Ocean: https://app.powerbi.com/
+  Fountain: https://fountain01/Fountain/jsp/protected/index.jsp
   Status: https://status.analytical-platform.service.justice.gov.uk/
   Support: https://github.com/ministryofjustice/data-platform-support/issues/new/choose
 
