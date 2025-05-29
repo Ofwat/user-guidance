@@ -20,4 +20,8 @@ jobs:
         with:
           bundler-cache: true
 
-      - run: ./create-test-site.sh
+      - name: Make script executable
+        run: chmod +x ./create-test-site.sh
+
+      - name: Run create-test-site.sh
+        run: ./create-test-site.sh

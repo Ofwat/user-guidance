@@ -23,9 +23,10 @@ jobs:
       - name: Install dependencies
         run: bundle install
 
-      - name: Make setup script executable
+      - name: Make script executable
         run: chmod +x ./create-test-site.sh
-      - name: Run setup script
+
+      - name: Run create-test-site.sh
         run: ./create-test-site.sh
 
       - name: Build Tech Docs site
