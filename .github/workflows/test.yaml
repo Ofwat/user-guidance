@@ -1,41 +1,66 @@
-name: Test
+name: 🚀 Publish
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+
+permissions: {}
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
 
 jobs:
-  test:
-    name: Create test site
+  build:
+    name: Build
     runs-on: ubuntu-latest
-
+    container:
+      image: ghcr.io/ministryofjustice/tech-docs-github-pages-publisher@sha256:30d00879b5c82afa5d76264164db46189fa11d4358b37ca35b6a62e341d62bb7 # v5.1.0
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          persist-credentials: false
 
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.2'
-          bundler-cache: false  # we'll install it explicitly
-
-      - name: Upgrade RubyGems
-        run: gem update --system
-
-      - name: Install latest Bundler
+      - name: Build site
+        id: build
         run: |
-          gem uninstall -aIx bundler || true
-          gem install bundler
-          echo 'export PATH="$(ruby -e '\''puts Gem.bindir'\''):$PATH"' >> $GITHUB_ENV
+          /usr/local/bin/package
 
-      - name: Install dependencies
-        run: bundle install --path vendor/bundle
+      - name: Upload artifact
+        id: upload_artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-pages
+          path: artifact.tar
+          retention-days: 1
+          overwrite: true
 
-      - name: Make script executable
-        run: chmod +x ./create-test-site.sh
+  publish:
+    needs: build
+    name: Publish
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.configure_pages.outputs.base_url }}
+    permissions:
+      contents: read
+      id-token: write
+      pages: write
+    steps:
+      - name: Configure Pages
+        id: configure_pages
+        uses: actions/configure-pages@v5
 
-      - name: Run create-test-site.sh
-        run: ./create-test-site.sh
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+
+      - name: Deploy to GitHub Pages
+        id: deploy_pages
+        uses: actions/deploy-pages@v4
