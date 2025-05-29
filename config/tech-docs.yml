@@ -1,5 +1,5 @@
 # Host to use for canonical URL generation (without trailing slash)
-host: https://user-guidance.analytical-platform.service.justice.gov.uk
+host: https://ofwat.github.io/user-guidance
 
 # Header-related options
 show_govuk_logo: false
