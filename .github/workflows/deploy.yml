@@ -2,7 +2,7 @@ name: Deploy Tech Docs to GitHub Pages
 
 on:
   push:
-    branches: [main]  # or master, depending on your default branch
+    branches: [main]  # Update if your default branch is different
 
 jobs:
   build-and-deploy:
@@ -15,13 +15,18 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2'  # match your `.ruby-version` or system setup
+          ruby-version: '3.2'
 
       - name: Install latest Bundler
         run: gem install bundler
 
       - name: Install dependencies
         run: bundle install
+
+      - name: Make setup script executable
+        run: chmod +x ./create-test-site.sh
+      - name: Run setup script
+        run: ./create-test-site.sh
 
       - name: Build Tech Docs site
         run: bundle exec middleman build
