@@ -1,26 +1,26 @@
-name: Deploy Middleman site to GitHub Pages
+name: Deploy Tech Docs to GitHub Pages
 
 on:
   push:
-    branches: [main]  # or "master" if you use that
+    branches: [main]  # or master, depending on your default branch
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2'  # or your preferred version
+          ruby-version: '3.2'  # match your `.ruby-version` or system setup
 
       - name: Install dependencies
         run: bundle install
 
-      - name: Build site with Middleman
+      - name: Build Tech Docs site
         run: bundle exec middleman build
 
       - name: Deploy to GitHub Pages

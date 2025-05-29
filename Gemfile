@@ -1,4 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'middleman', '~> 4.5'
-gem 'middleman-gh-pages'
+gem 'middleman'
+
+group :development, :test do
+  gem 'jasmine'
+  gem 'rake'
+  gem 'rspec'
+end
