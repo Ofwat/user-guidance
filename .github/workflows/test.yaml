@@ -16,9 +16,20 @@ jobs:
         with:
           node-version: '14'
 
-      - uses: ruby/setup-ruby@v1
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
+          ruby-version: '3.2' # Explicitly specify compatible Ruby version
+          bundler-cache: false # We'll manage bundler explicitly
+
+      - name: Upgrade RubyGems
+        run: gem update --system
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Install dependencies
+        run: bundle install --path vendor/bundle
 
       - name: Make script executable
         run: chmod +x ./create-test-site.sh
